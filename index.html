@@ -7,30 +7,23 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>DFA/NFA Visualizer</h1>
-  <input type="text" id="inputString" placeholder="Enter input string (e.g., 101)">
-  <br>
-  <button onclick="runSimulation()">Run</button>
+     <h1>DFA/NFA Visualizer</h1>
 
-  <div class="container">
-    <canvas id="canvas" width="700" height="500"></canvas>
+  <div class="controls">
+    <label for="languageInput">Define Language:</label>
+    <textarea id="languageInput" placeholder="e.g. strings that end with '01' over the alphabet {0,1}"></textarea>
 
-    <table id="transitionTable">
-      <thead>
-        <tr>
-          <th>Step</th>
-          <th>Current State</th>
-          <th>Input</th>
-          <th>Next State</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        <!-- Filled by JS -->
-      </tbody>
-    </table>
+    <input type="text" id="inputString" placeholder="Enter input string..." />
+    <select id="mode">
+      <option value="dfa">DFA</option>
+      <option value="nfa">NFA</option>
+    </select>
+    <button onclick="startSimulation()">Start Simulation</button>
   </div>
 
-  <div id="result"></div>
+  <canvas id="canvas" width="600" height="300"></canvas>
+  <div id="stepOutput"></div>
+  <table id="transitionTable"></table>
 
   <script src="script.js"></script>
   </body>
