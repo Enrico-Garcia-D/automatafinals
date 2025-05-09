@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>DFA/NFA Visualizer</h1>
+  <input type="text" id="inputString" placeholder="Enter input string (e.g., 101)">
+  <br>
+  <button onclick="runSimulation()">Run</button>
+
+  <div class="container">
+    <canvas id="canvas" width="700" height="500"></canvas>
+
+    <table id="transitionTable">
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>Current State</th>
+          <th>Input</th>
+          <th>Next State</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <div id="result"></div>
+
+  <script src="script.js"></script>
+  </body>
+</html>

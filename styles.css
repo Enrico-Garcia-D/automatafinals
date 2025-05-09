@@ -1,0 +1,50 @@
+body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+
+    #transitionTable {
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    #transitionTable th, #transitionTable td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+    }
+
+    #transitionTable th {
+      background-color: #f2f2f2;
+    }
+
+    .highlight {
+      background-color: #d1ffd1;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      width: 300px;
+    }
+
+    button {
+      padding: 8px 16px;
+      margin-top: 10px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
