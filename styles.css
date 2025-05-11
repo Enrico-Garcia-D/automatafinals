@@ -1,37 +1,69 @@
- body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f9f9f9;
-    }
-    h1 {
-      text-align: center;
-    }
-    #canvas {
-      border: 1px solid #ccc;
-      margin-top: 20px;
-      background: white;
-    }
-    table {
-      margin-top: 20px;
-      border-collapse: collapse;
-      width: 100%;
-    }
-    th, td {
-      border: 1px solid #aaa;
-      padding: 8px;
-      text-align: center;
-    }
-    #stepOutput {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    textarea {
-      width: 100%;
-      height: 80px;
-      margin-bottom: 10px;
-    }
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+label {
+  display: block;
+  margin-top: 10px;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+}
+/* Improved layout for transition table */
+#transitionTable {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+th {
+  background-color: #f4f4f4;
+}
+td {
+  font-size: 14px;
+}
+td.highlight {
+  background-color: lightgreen !important;
+  transition: background-color 0.5s ease;
+}
+
+/* Adjust state diagram's appearance */
+#stateDiagram svg {
+  max-width: 100%;
+  height: 200px;
+  display: block;
+  margin-top: 20px;
+}
+svg circle {
+  stroke: black;
+  fill: white;
+  transition: fill 0.5s ease;
+}
+svg text {
+  font-size: 14px;
+  text-anchor: middle;
+}
+.active-state circle {
+  fill: yellow;
+}

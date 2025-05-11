@@ -7,24 +7,56 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-     <h1>DFA/NFA Visualizer</h1>
+   <div class="container">
+    <h2>DFA/NFA Visualizer with Animation</h2>
+    <label>Define Language:</label>
+    <input type="text" id="languageDesc" placeholder="e.g., strings that end with '10' over {0,1}" />
 
-  <div class="controls">
-    <label for="languageInput">Define Language: (strings that [startwith/endswith] '10' over the [alphabet] {0, 1}
-)</label>
-    <textarea id="languageInput" placeholder="e.g. strings that end with '01' over the alphabet {0,1}"></textarea>
-
-    <input type="text" id="inputString" placeholder="Enter input string..." />
-    <select id="mode">
-      <option value="dfa">DFA</option>
-      <option value="nfa">NFA</option>
+    <label>Automaton Type:</label>
+    <select id="automatonType">
+      <option value="DFA">DFA</option>
+      <option value="NFA">NFA</option>
     </select>
-    <button onclick="startSimulation()">Start Simulation</button>
-  </div>
 
-  <canvas id="canvas" width="600" height="300"></canvas>
-  <div id="stepOutput"></div>
-  <table id="transitionTable"></table>
+    <label>States (comma separated):</label>
+    <input type="text" id="states" value="q0,q1,q2,q3" />
+
+    <label>Alphabet (comma separated):</label>
+    <input type="text" id="alphabet" value="0,1" />
+
+    <label>Start State:</label>
+    <input type="text" id="startState" value="q0" />
+
+    <label>Accept States (comma separated):</label>
+    <input type="text" id="acceptStates" value="q3" />
+
+    <label>Transitions (one per line):</label>
+    <textarea id="transitions" rows="6">q0,0->q1
+q0,1->q0
+q1,0->q1
+q1,1->q2
+q2,0->q3
+q2,1->q0
+q3,0->q1
+q3,1->q0</textarea>
+
+    <label>Input String:</label>
+    <input type="text" id="inputString" value="100" />
+
+    <button onclick="simulateAutomaton()">Simulate</button>
+
+    <h3>Transition Table</h3>
+    <div id="transitionTable"></div>
+
+    <h3>State Diagram</h3>
+    <div id="stateDiagram"></div>
+
+    <h3>Simulation Steps</h3>
+    <ul id="steps"></ul>
+
+    <h3>Final Result</h3>
+    <p id="result"></p>
+  </div>
 
   <script src="script.js"></script>
   </body>
