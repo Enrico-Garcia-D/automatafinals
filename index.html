@@ -7,57 +7,72 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-   <div class="container">
-    <h2>DFA/NFA Visualizer with Animation</h2>
-    <label>Define Language:</label>
-    <input type="text" id="languageDesc" placeholder="e.g., strings that end with '10' over {0,1}" />
+    <h1>DFA/NFA Visualizer</h1>
 
-    <label>Automaton Type:</label>
-    <select id="automatonType">
-      <option value="DFA">DFA</option>
-      <option value="NFA">NFA</option>
-    </select>
+    <div class="main-container">
+      <div class="input-area">
+        <h2>Automaton Definition</h2>
+        <label>Type:</label>
+        <input
+          type="radio"
+          name="automatonType"
+          value="DFA"
+          id="dfaRadio"
+          checked
+        />
+        <label for="dfaRadio">DFA</label>
+        <input type="radio" name="automatonType" value="NFA" id="nfaRadio" />
+        <label for="nfaRadio">NFA</label>
+        <br />
+        <label for="statesInput">States (comma-separated):</label><br />
+        <input type="text" id="statesInput" value="q0,q1" /><br />
 
-    <label>States (comma separated):</label>
-    <input type="text" id="states" value="q0,q1,q2,q3" />
+        <label for="alphabetInput">Alphabet (comma-separated):</label><br />
+        <input type="text" id="alphabetInput" value="a,b" /><br />
 
-    <label>Alphabet (comma separated):</label>
-    <input type="text" id="alphabet" value="0,1" />
+        <label for="startStateInput">Start State:</label><br />
+        <input type="text" id="startStateInput" value="q0" /><br />
 
-    <label>Start State:</label>
-    <input type="text" id="startState" value="q0" />
+        <label for="acceptStatesInput">Accept States (comma-separated):</label
+        ><br />
+        <input type="text" id="acceptStatesInput" value="q0" /><br />
 
-    <label>Accept States (comma separated):</label>
-    <input type="text" id="acceptStates" value="q3" />
+        <label for="transitionsInput"
+          >Transitions (from,symbol->to; or from,symbol->to1,to2,...):</label
+        ><br />
+        <textarea id="transitionsInput" rows="5" cols="40">
+q0,a->q1; q0,b->q0; q1,a->q0; q1,b->q1</textarea
+        ><br />
 
-    <label>Transitions (one per line):</label>
-    <textarea id="transitions" rows="6">q0,0->q1
-q0,1->q0
-q1,0->q1
-q1,1->q2
-q2,0->q3
-q2,1->q0
-q3,0->q1
-q3,1->q0</textarea>
+        <label for="stringInput">Input String:</label><br />
+        <input type="text" id="stringInput" value="aababa" /><br />
 
-    <label>Input String:</label>
-    <input type="text" id="inputString" value="100" />
+        <button id="loadAndRunBtn">Load Automaton & Run</button>
+        <button id="resetBtn">Reset</button>
 
-    <button onclick="simulateAutomaton()">Simulate</button>
+        <p id="statusMessage" class="status"></p>
+      </div>
 
-    <h3>Transition Table</h3>
-    <div id="transitionTable"></div>
+      <div class="output-area">
+        <h2>Visualization & Output</h2>
 
-    <h3>State Diagram</h3>
-    <div id="stateDiagram"></div>
+        <div class="transition-table-container">
+          <h3>Transition Table</h3>
+          <table id="transitionTable"></table>
+        </div>
 
-    <h3>Simulation Steps</h3>
-    <ul id="steps"></ul>
+        <div class="visualization-container">
+          <h3>State Diagram</h3>
+          <canvas id="automatonCanvas" width="600" height="350"></canvas>
+        </div>
 
-    <h3>Final Result</h3>
-    <p id="result"></p>
-  </div>
+        <div class="simulation-output">
+          <h3>Result</h3>
+          <p id="simulationResult"></p>
+        </div>
+      </div>
+    </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
