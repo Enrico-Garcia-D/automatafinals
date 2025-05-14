@@ -32,14 +32,14 @@ h1, h2, h3 {
 }
 
 .output-area {
-    flex: 2; /* Allow output area to grow more */
-    min-width: 400px; /* Minimum width before wrapping */
+    flex: 2; 
+    min-width: 400px; 
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    display: flex; /* Use flexbox for inner output elements */
-    flex-direction: column; /* Stack inner elements vertically */
-    gap: 15px; /* Space between table, canvas, result */
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
 }
 
 label {
@@ -49,7 +49,7 @@ label {
 }
 
 input[type="text"], textarea {
-    width: calc(100% - 12px); /* Adjust for padding/border */
+    width: calc(100% - 12px); 
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -99,19 +99,40 @@ button:disabled {
 
 
 /* --- Visualization Area --- */
+/* --- Visualization Area --- */
 .visualization-container {
-    text-align: center; /* Center the canvas */
+    text-align: center;
+    overflow-x: auto;
+    margin-top: 20px;
+    padding: 10px;
+    max-width: 100%;
 }
 
 #automatonCanvas {
+    max-width: 100%;
+    height: auto;
     border: 1px solid #ccc;
-    background-color: #fff; /* Canvas background */
+    background-color: #fff;
+    display: block;
+    margin: 0 auto;
 }
 
-/* --- Simulation Output --- */
-.simulation-output p {
-    font-size: 1.2em;
-    font-weight: bold;
+/* --- Legend for State Diagram --- */
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+.legend span {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    vertical-align: middle;
+    border-radius: 50%;
 }
 
 /* Colors (used by JS for canvas drawing) */
@@ -119,6 +140,5 @@ button:disabled {
     --state-color: #3498db;         /* Default state blue */
     --start-state-color: #f39c12;   /* Start state orange */
     --accept-state-color: #2ecc71;  /* Accept state green */
-    /* No 'current' state color needed for instant run */
     --transition-color: #333;       /* Black for transitions */
 }

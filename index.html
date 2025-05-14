@@ -64,6 +64,20 @@ q0,a->q1; q0,b->q0; q1,a->q0; q1,b->q1</textarea
         <div class="visualization-container">
           <h3>State Diagram</h3>
           <canvas id="automatonCanvas" width="600" height="350"></canvas>
+          <div class="legend">
+            <div>
+              <span style="background-color: var(--start-state-color)"></span>
+              Start State
+            </div>
+            <div>
+              <span style="background-color: var(--accept-state-color)"></span>
+              Accept State
+            </div>
+            <div>
+              <span style="background-color: var(--state-color)"></span> Regular
+              State
+            </div>
+          </div>
         </div>
 
         <div class="simulation-output">

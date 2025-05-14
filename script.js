@@ -1,10 +1,23 @@
 document.getElementById("loadAndRunBtn").addEventListener("click", () => {
-  const type = document.querySelector('input[name="automatonType"]:checked').value;
-  const states = document.getElementById("statesInput").value.split(",").map(s => s.trim());
-  const alphabet = document.getElementById("alphabetInput").value.split(",").map(s => s.trim());
+  const type = document.querySelector(
+    'input[name="automatonType"]:checked'
+  ).value;
+  const states = document
+    .getElementById("statesInput")
+    .value.split(",")
+    .map((s) => s.trim());
+  const alphabet = document
+    .getElementById("alphabetInput")
+    .value.split(",")
+    .map((s) => s.trim());
   const startState = document.getElementById("startStateInput").value.trim();
-  const acceptStates = document.getElementById("acceptStatesInput").value.split(",").map(s => s.trim());
-  const transitionsText = document.getElementById("transitionsInput").value.trim();
+  const acceptStates = document
+    .getElementById("acceptStatesInput")
+    .value.split(",")
+    .map((s) => s.trim());
+  const transitionsText = document
+    .getElementById("transitionsInput")
+    .value.trim();
   const inputString = document.getElementById("stringInput").value.trim();
 
   const transitions = parseTransitions(transitionsText, type);
@@ -12,10 +25,22 @@ document.getElementById("loadAndRunBtn").addEventListener("click", () => {
   drawAutomaton(states, acceptStates, startState, transitions, type);
 
   const traceOutput = [];
-  const result = simulateAutomaton(type, states, alphabet, startState, acceptStates, transitions, inputString, traceOutput);
+  const result = simulateAutomaton(
+    type,
+    states,
+    alphabet,
+    startState,
+    acceptStates,
+    transitions,
+    inputString,
+    traceOutput
+  );
 
-  const output = result ? "✅ Input accepted by " + type : "❌ Input rejected by " + type;
-  document.getElementById("simulationResult").innerText = output + "\n\n" + traceOutput.join("\n");
+  const output = result
+    ? "✅ Input accepted by " + type
+    : "❌ Input rejected by " + type;
+  document.getElementById("simulationResult").innerText =
+    output + "\n\n" + traceOutput.join("\n");
 });
 
 document.getElementById("resetBtn").addEventListener("click", () => {
@@ -29,11 +54,14 @@ function parseTransitions(input, type) {
   const transitions = {};
   const rules = input.split(";");
 
-  rules.forEach(rule => {
+  rules.forEach((rule) => {
     if (!rule.trim()) return;
     const [left, right] = rule.split("->");
     const [from, symbol] = left.trim().split(",");
-    const toStates = right.trim().split(",").map(s => s.trim());
+    const toStates = right
+      .trim()
+      .split(",")
+      .map((s) => s.trim());
 
     if (!transitions[from]) transitions[from] = {};
 
@@ -54,11 +82,11 @@ function renderTransitionTable(transitions, alphabet, states, type) {
 
   // Create header row
   const headerRow = document.createElement("tr");
-  const headerCells = ['<th>State</th>'];
+  const headerCells = ["<th>State</th>"];
   for (const symbol of alphabet) {
     headerCells.push(`<th>${symbol}</th>`);
   }
-  headerRow.innerHTML = headerCells.join('');
+  headerRow.innerHTML = headerCells.join("");
   table.appendChild(headerRow);
 
   // Create one row per state
@@ -78,11 +106,10 @@ function renderTransitionTable(transitions, alphabet, states, type) {
       rowCells.push(`<td>${cellValue}</td>`);
     }
 
-    row.innerHTML = rowCells.join('');
+    row.innerHTML = rowCells.join("");
     table.appendChild(row);
   }
 }
-
 
 function drawAutomaton(states, acceptStates, startState, transitions, type) {
   const canvas = document.getElementById("automatonCanvas");
@@ -94,72 +121,123 @@ function drawAutomaton(states, acceptStates, startState, transitions, type) {
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
   const angleStep = (2 * Math.PI) / states.length;
+  const stateRadius = 100; // Increase state separation
 
+  ctx.font = "bold 14px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  // Draw states with better spacing
   states.forEach((state, index) => {
     const angle = index * angleStep;
-    const x = centerX + 120 * Math.cos(angle);
-    const y = centerY + 120 * Math.sin(angle);
+    const x = centerX + stateRadius * Math.cos(angle);
+    const y = centerY + stateRadius * Math.sin(angle);
     positions[state] = { x, y };
 
+    // Main circle
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, 2 * Math.PI);
-    ctx.fillStyle = acceptStates.includes(state) ? "#DFF0D8" : "#FFFFFF";
+    ctx.fillStyle = acceptStates.includes(state) ? "#E0FFE0" : "#FFFFFF";
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = "#000";
-    ctx.fillText(state, x - 10, y + 5);
 
-    if (state === startState) {
+    // Double circle for accept state
+    if (acceptStates.includes(state)) {
       ctx.beginPath();
-      ctx.moveTo(x - 50, y);
-      ctx.lineTo(x - radius, y);
+      ctx.arc(x, y, radius - 5, 0, 2 * Math.PI);
       ctx.stroke();
-      ctx.fillText("Start", x - 65, y - 5);
     }
+
+    // State name
+    ctx.fillStyle = "#000";
+    ctx.fillText(state, x, y);
   });
 
-  // Draw transitions with arrows
+  // Draw start arrow
+  if (startState in positions) {
+    const start = positions[startState];
+    ctx.beginPath();
+    ctx.moveTo(start.x - radius * 2, start.y);
+    ctx.lineTo(start.x - radius, start.y);
+    ctx.stroke();
+    drawArrowhead(ctx, start.x - radius, start.y, 0); // horizontal left-to-right
+    ctx.fillText("Start", start.x - radius * 2.5, start.y - 15);
+  }
+
+  // Draw transitions with better curve handling
   for (const from in transitions) {
     for (const symbol in transitions[from]) {
-      const destinations = transitions[from][symbol];
-      const fromPos = positions[from];
-      const toStates = Array.isArray(destinations) ? destinations : [destinations];
+      const destinations = Array.isArray(transitions[from][symbol])
+        ? transitions[from][symbol]
+        : [transitions[from][symbol]];
 
-      toStates.forEach(to => {
+      destinations.forEach((to) => {
+        const fromPos = positions[from];
         const toPos = positions[to];
-        const dx = toPos.x - fromPos.x;
-        const dy = toPos.y - fromPos.y;
-        const angle = Math.atan2(dy, dx);
-        const startX = fromPos.x + radius * Math.cos(angle);
-        const startY = fromPos.y + radius * Math.sin(angle);
-        const endX = toPos.x - radius * Math.cos(angle);
-        const endY = toPos.y - radius * Math.sin(angle);
 
-        ctx.beginPath();
-        ctx.moveTo(startX, startY);
-        ctx.lineTo(endX, endY);
-        ctx.stroke();
+        if (from === to) {
+          // Self-loop with adjusted position to avoid collision
+          ctx.beginPath();
+          ctx.arc(fromPos.x, fromPos.y - radius - 10, 15, 0, 2 * Math.PI);
+          ctx.stroke();
+          ctx.fillText(symbol, fromPos.x, fromPos.y - radius - 30);
+        } else {
+          // Arrow between states with spacing improvements
+          const dx = toPos.x - fromPos.x;
+          const dy = toPos.y - fromPos.y;
+          const angle = Math.atan2(dy, dx);
+          const startX = fromPos.x + radius * Math.cos(angle);
+          const startY = fromPos.y + radius * Math.sin(angle);
+          const endX = toPos.x - radius * Math.cos(angle);
+          const endY = toPos.y - radius * Math.sin(angle);
 
-        // Draw arrowhead
-        const headlen = 10;
-        ctx.beginPath();
-        ctx.moveTo(endX, endY);
-        ctx.lineTo(endX - headlen * Math.cos(angle - Math.PI / 6), endY - headlen * Math.sin(angle - Math.PI / 6));
-        ctx.lineTo(endX - headlen * Math.cos(angle + Math.PI / 6), endY - headlen * Math.sin(angle + Math.PI / 6));
-        ctx.lineTo(endX, endY);
-        ctx.fill();
+          // Adjust control points for better spacing
+          const cpX = (startX + endX) / 2;
+          const cpY = (startY + endY) / 2;
 
-        // Draw label
-        const labelX = (startX + endX) / 2;
-        const labelY = (startY + endY) / 2;
-        ctx.fillStyle = "blue";
-        ctx.fillText(symbol, labelX, labelY - 5);
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.quadraticCurveTo(cpX, cpY, endX, endY);
+          ctx.stroke();
+
+          drawArrowhead(ctx, endX, endY, angle);
+
+          // Label with better positioning
+          ctx.fillStyle = "blue";
+          ctx.fillText(symbol, cpX, cpY - 10);
+        }
       });
     }
   }
 }
 
-function simulateAutomaton(type, states, alphabet, start, accepts, transitions, input, traceOutput) {
+function drawArrowhead(ctx, x, y, angle) {
+  const headlen = 10;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(
+    x - headlen * Math.cos(angle - Math.PI / 6),
+    y - headlen * Math.sin(angle - Math.PI / 6)
+  );
+  ctx.lineTo(
+    x - headlen * Math.cos(angle + Math.PI / 6),
+    y - headlen * Math.sin(angle + Math.PI / 6)
+  );
+  ctx.lineTo(x, y);
+  ctx.fillStyle = "#000";
+  ctx.fill();
+}
+
+function simulateAutomaton(
+  type,
+  states,
+  alphabet,
+  start,
+  accepts,
+  transitions,
+  input,
+  traceOutput
+) {
   if (type === "DFA") {
     let current = start;
     traceOutput.push(`Start at: ${current}`);
@@ -180,7 +258,9 @@ function simulateAutomaton(type, states, alphabet, start, accepts, transitions, 
     }
 
     const result = accepts.includes(current);
-    traceOutput.push(`End at: ${current} (${result ? "ACCEPTED" : "REJECTED"})`);
+    traceOutput.push(
+      `End at: ${current} (${result ? "ACCEPTED" : "REJECTED"})`
+    );
     return result;
   }
 
@@ -192,7 +272,9 @@ function simulateAutomaton(type, states, alphabet, start, accepts, transitions, 
       if (visited.has(key)) return false;
       visited.add(key);
 
-      path.push(`${state}${index < input.length ? ` --${input[index]}--> ` : ""}`);
+      path.push(
+        `${state}${index < input.length ? ` --${input[index]}--> ` : ""}`
+      );
 
       if (index === input.length) {
         if (accepts.includes(state)) {
